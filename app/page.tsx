@@ -15,6 +15,8 @@ export default function Home() {
   const [bingoMachine, setBingoMachine] = useState(new BingoMachine(maxNumber)); // ビンゴマシン
   const [currentNumber, setCurrentNumber] = useState<number | null>(null); // 現在の番号
   const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]); // 既に抽選された番号
+  const [visibleNumbers, setVisibleNumbers] = useState<number[]>([]); // 表示される番号
+  const [isInitialRender, setIsInitialRender] = useState(true); // 初回レンダリングかどうか
 
   // ページ読み込み時にローカルストレージから既に抽選された番号を取得する
   // コンポーネントの初期化(useState)ははレンダリング前に実施される
@@ -32,6 +34,24 @@ export default function Home() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(drawnNumbers));
   }, [drawnNumbers]);
+
+  // useEffectで遅延処理を追加
+  useEffect(() => {
+    if (drawnNumbers.length > visibleNumbers.length) {
+      // 初回レンダリング時は、抽選番号を即座に表示する
+      if (isInitialRender && drawnNumbers.length == 0) {
+        setVisibleNumbers([...drawnNumbers]);
+        setIsInitialRender(false);
+        return;
+      }
+
+      // 初回レンダリング以外では、演出に合わせて表示を遅延させる
+      const timer = setTimeout(() => {
+        setVisibleNumbers(drawnNumbers.slice(0, visibleNumbers.length + 1));
+      }, 1200); // 抽選演出と同じ遅延を含ませる
+      return () => clearTimeout(timer);
+    }
+  }, [drawnNumbers, visibleNumbers, isInitialRender]);
 
   // 最大値の変更処理
   const handleMaxNumberChange = (
@@ -106,7 +126,7 @@ export default function Home() {
             抽選された番号がここに表示されます
           </div>
         ) : (
-          drawnNumbers.map((num, index) => (
+          visibleNumbers.map((num, index) => (
             <div key={index} className="w-full justify-center">
               <DrawnNumber number={num} />
             </div>
