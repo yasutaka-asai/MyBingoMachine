@@ -82,7 +82,7 @@ export default function Home() {
       </div>
 
       <div className="text-center mb-8">
-        <div className="text-8xl font-bold mb-4">{currentNumber || "-"}</div>
+        <div className="text-[12rem] font-bold mb-4">{currentNumber || "-"}</div>
         <button
           onClick={drawNumber}
           className="bg-blue-500 text-white px-6 py-2 rounded-lg"
@@ -92,9 +92,9 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 auto-rows-auto gap-4 mx-auto max-w-7xl">
         {drawnNumbers.map((num, index) => (
-          <div key={index}>
+          <div key={index} className="w-full justify-center">
             <DrawnNumber number={num} />
           </div>
         ))}
