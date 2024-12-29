@@ -1,8 +1,8 @@
 class BingoMachine {
     private numbers: number[];
     
-    constructor() {
-        this.numbers = Array.from({length: 75}, (_, i) => i + 1);
+    constructor(maxNumber: number = 75) {
+        this.numbers = Array.from({length: maxNumber}, (_, i) => i + 1);
     }
 
     drawNumber(): number | null {
