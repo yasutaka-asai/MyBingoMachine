@@ -67,7 +67,7 @@ export default function Home() {
 
   const drawNumber = () => {
     // 番号を抽選する
-    const number = bingoMachine.drawNumber();
+    const number = bingoMachine.drawNumber(drawnNumbers);
 
     // 番号があれば、現在の番号として設定し、既に抽選された番号に追加する
     if (number) {
