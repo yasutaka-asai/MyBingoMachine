@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSound } from "./hooks/useSound";
 import BingoMachine from "../util/BingoMachine";
 import DrawnNumber from "./components/DrawnNumber";
 
@@ -9,6 +10,7 @@ const STORAGE_KEY = "bingoDrawnNumbers";
 const defaultMaxNumber = 75;
 
 export default function Home() {
+  const { playSound } = useSound();
   const [maxNumber, setMaxNumber] = useState(defaultMaxNumber); // 数値の最大値
   const [bingoMachine, setBingoMachine] = useState(new BingoMachine(maxNumber)); // ビンゴマシン
   const [currentNumber, setCurrentNumber] = useState<number | null>(null); // 現在の番号
@@ -49,6 +51,7 @@ export default function Home() {
 
     // 番号があれば、現在の番号として設定し、既に抽選された番号に追加する
     if (number) {
+      playSound();
       setCurrentNumber(number);
       setDrawnNumbers((prev) => [...prev, number]);
     }
@@ -66,9 +69,25 @@ export default function Home() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-4xl font-bold mb-8">ビンゴマシン</h1>
+
+      <div className="text-center mb-8">
+        <div
+          className="text-[12rem] font-bold mb-4 transition-opacity duration-500 animate-number-change"
+          key={currentNumber}
+        >
+          {currentNumber || "-"}
+        </div>
+        <button
+          onClick={drawNumber}
+          className="bg-blue-500 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:bg-blue-600 duration-200"
+          disabled={!bingoMachine.getRemaining().length}
+        >
+          抽選する
+        </button>
+      </div>
       <div className="text-center mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          最大値設定
+          ビンゴの最大値設定
           <input
             type="number"
             min="1"
@@ -81,28 +100,23 @@ export default function Home() {
         </label>
       </div>
 
-      <div className="text-center mb-8">
-        <div className="text-[12rem] font-bold mb-4">{currentNumber || "-"}</div>
-        <button
-          onClick={drawNumber}
-          className="bg-blue-500 text-white px-6 py-2 rounded-lg"
-          disabled={!bingoMachine.getRemaining().length}
-        >
-          抽選する
-        </button>
-      </div>
-
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 auto-rows-auto gap-4 mx-auto max-w-7xl">
-        {drawnNumbers.map((num, index) => (
-          <div key={index} className="w-full justify-center">
-            <DrawnNumber number={num} />
+        {drawnNumbers.length === 0 ? (
+          <div className="col-span-full text-center text-gray-500 text-xl py-8">
+            抽選された番号がここに表示されます
           </div>
-        ))}
+        ) : (
+          drawnNumbers.map((num, index) => (
+            <div key={index} className="w-full justify-center">
+              <DrawnNumber number={num} />
+            </div>
+          ))
+        )}
       </div>
       <div className="text-center mt-8">
         <button
           onClick={resetDrawnNumbers}
-          className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600"
+          className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 duration-200"
         >
           リセット
         </button>
