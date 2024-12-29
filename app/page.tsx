@@ -39,7 +39,7 @@ export default function Home() {
   useEffect(() => {
     if (drawnNumbers.length > visibleNumbers.length) {
       // 初回レンダリング時は、抽選番号を即座に表示する
-      if (isInitialRender && drawnNumbers.length == 0) {
+      if (isInitialRender) {
         setVisibleNumbers([...drawnNumbers]);
         setIsInitialRender(false);
         return;
