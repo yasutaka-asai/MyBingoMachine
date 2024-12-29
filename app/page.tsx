@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import BingoMachine from "../util/BingoMachine";
+import DrawnNumber from "./components/DrawnNumber";
 
 // ローカルストレージに保存するためのキー
 const STORAGE_KEY = "bingoDrawnNumbers";
@@ -93,8 +94,8 @@ export default function Home() {
 
       <div className="grid grid-cols-5 gap-2">
         {drawnNumbers.map((num, index) => (
-          <div key={index} className="bg-gray-100 p-2 text-center rounded">
-            {num}
+          <div key={index}>
+            <DrawnNumber number={num} />
           </div>
         ))}
       </div>
