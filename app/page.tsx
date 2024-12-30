@@ -159,9 +159,8 @@ export default function Home() {
         </div>
 
         <div className="text-center">
-          <div className="flex items-center justify-center">
+          <div className="flex flex-wrap items-center justify-center">
             <label className="mr-4 text-sm font-medium text-gray-700">
-              音声選択：
               <input
                 type="radio"
                 name="sound"
