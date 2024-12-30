@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className={font.className}>
-      <body className="bg-gradient-to-b from-red-100 to-yellow-100">{children}</body>
+      <body className="bg-gradient-to-b from-red-100 to-yellow-100 min-h-screen">{children}</body>
     </html>
   )
 }
