@@ -107,23 +107,32 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-8">ビンゴマシン</h1>
+      <h1 className="text-5xl font-brush mb-8 text-center text-red-700 py-4 bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500 relative z-10 shadow-lg border-2 border-red-300 rounded-md">
+        <span className="relative z-20">
+          🎍お正月ビンゴ大会🎍
+        </span>
+        <span className="absolute inset-0 bg-white opacity-20 rounded-lg blur-md"></span>
+      </h1>
 
       <div className="text-center mb-8">
-        <div
-          className={"text-[12rem] font-bold mb-4 animate-number-change"}
-          key={currentNumber}
-        >
-          {currentNumber || "-"}
+        <div className="relative inline-block">
+          <div
+            className={"text-[12rem] mb-4 animate-number-change text-shadow-lg font-brush"}
+            key={currentNumber}
+          >
+            {currentNumber || "-"}
+          </div>
         </div>
+        <br />
         <button
           onClick={drawNumber}
-          className="bg-blue-500 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:bg-blue-600 duration-200"
+          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:from-blue-600 hover:to-blue-800 duration-200 shadow-md"
           disabled={isDrumRoll || !bingoMachine.getRemaining().length}
         >
           抽選する
         </button>
       </div>
+
       <div className="text-center mb-4">
         <label className="block text-sm font-medium text-gray-700">
           ビンゴの最大値設定
@@ -147,7 +156,7 @@ export default function Home() {
         ) : (
           visibleNumbers.map((num, index) => (
             <div key={index} className="w-full justify-center">
-              <DrawnNumber number={num} />
+              <DrawnNumber number={num}/>
             </div>
           ))
         )}
@@ -155,7 +164,7 @@ export default function Home() {
       <div className="text-center mt-8">
         <button
           onClick={resetDrawnNumbers}
-          className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 duration-200"
+          className="bg-gradient-to-r from-red-500 to-red-700 text-white px-6 py-2 rounded-lg hover:from-red-600 hover:to-red-800 duration-200 shadow-md"
         >
           リセット
         </button>

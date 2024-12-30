@@ -3,9 +3,10 @@ import React from "react";
 
 interface DrawnNumberProps {
   number: number;
+  className?: string;
 }
 
-const DrawnNumber: React.FC<DrawnNumberProps> = ({ number }) => {
+const DrawnNumber: React.FC<DrawnNumberProps> = ({ number, className }) => {
   const getBorderColorClass = (num: number) => {
     const range = Math.floor((num - 1) / 10);
     switch (range) {
@@ -33,21 +34,26 @@ const DrawnNumber: React.FC<DrawnNumberProps> = ({ number }) => {
   return (
     <div
       className={`
-            bg-gray-100
-            p-2
+            bg-white
+            p-4
             text-center
-            rounded-lg
-            border-4
+            rounded-full
+            border-8
             ${getBorderColorClass(number)}
             text-4xl
             font-bold
-            shadow-md
+            shadow-lg
             hover:scale-105
             transition-transform
             duration-200
+            relative
+            overflow-hidden
+            font-brush
+            ${className}
         `}
     >
-      {number}
+      <span className="relative z-10">{number}</span>
+      <span className="absolute inset-0 bg-gray-100 opacity-30 rounded-full blur-sm"></span>
     </div>
   );
 };
