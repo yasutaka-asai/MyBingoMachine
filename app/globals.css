@@ -42,5 +42,5 @@ body {
 
 /* 抽選番号のアニメーションタグ */
 .animate-number-change {
-  animation: numberChange 2.0s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: numberChange 2.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
