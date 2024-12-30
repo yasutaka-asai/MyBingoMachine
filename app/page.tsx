@@ -18,6 +18,7 @@ export default function Home() {
   const [visibleNumbers, setVisibleNumbers] = useState<number[]>([]); // 表示される番号
   const [isInitialRender, setIsInitialRender] = useState(true); // 初回レンダリングかどうか
   const [isDrumRoll, setIsDrumRoll] = useState(false); // ドラムロール中かどうか
+  const [soundIndex, setSoundIndex] = useState(0); // 音声のインデックス
 
   // ページ読み込み時にローカルストレージから既に抽選された番号を取得する
   // コンポーネントの初期化(useState)ははレンダリング前に実施される
@@ -84,13 +85,18 @@ export default function Home() {
     setBingoMachine(new BingoMachine(newMax));
   };
 
+  // 再生する音声を変更する
+  const handleSoundChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSoundIndex(parseInt(event.target.value));
+  };
+
   const drawNumber = () => {
     // 番号を抽選する
     const number = bingoMachine.drawNumber(drawnNumbers);
 
     // 番号があれば、現在の番号として設定し、既に抽選された番号に追加する
     if (number) {
-      playSound();
+      playSound(soundIndex);
       setCurrentNumber(number);
       setDrawnNumbers((prev) => [...prev, number]);
     }
@@ -136,19 +142,71 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="text-center mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          ビンゴの最大値設定
-          <input
-            type="number"
-            min="1"
-            max="999"
-            value={maxNumber || ""} // 0の場合は空文字を表示
-            onChange={handleMaxNumberChange}
-            className="ml-2 p-1 border rounded"
-            disabled={drawnNumbers.length !== 0}
-          />
-        </label>
+      <div className="flex flex-col sm:flex-row items-center justify-center mb-4 gap-4">
+        <div className="text-center mr-4">
+          <label className="block text-sm font-medium text-gray-700">
+            ビンゴの最大値設定：
+            <input
+              type="number"
+              min="1"
+              max="999"
+              value={maxNumber || ""}
+              onChange={handleMaxNumberChange}
+              className="ml-2 p-1 border rounded text-black"
+              disabled={drawnNumbers.length !== 0}
+            />
+          </label>
+        </div>
+
+        <div className="text-center">
+          <div className="flex items-center justify-center">
+            <label className="mr-4 text-sm font-medium text-gray-700">
+              音声選択：
+              <input
+                type="radio"
+                name="sound"
+                value={0}
+                checked={soundIndex === 0}
+                onChange={handleSoundChange}
+                className="mr-1"
+              />
+              ランダム
+            </label>
+            <label className="mr-4 text-sm font-medium text-gray-700">
+              <input
+                type="radio"
+                name="sound"
+                value={1}
+                checked={soundIndex === 1}
+                onChange={handleSoundChange}
+                className="mr-1"
+              />
+              サウンド1
+            </label>
+            <label className="mr-4 text-sm font-medium text-gray-700">
+              <input
+                type="radio"
+                name="sound"
+                value={2}
+                checked={soundIndex === 2}
+                onChange={handleSoundChange}
+                className="mr-1"
+              />
+              サウンド2
+            </label>
+            <label className="text-sm font-medium text-gray-700">
+              <input
+                type="radio"
+                name="sound"
+                value={3}
+                checked={soundIndex === 3}
+                onChange={handleSoundChange}
+                className="mr-1"
+              />
+              サウンド3
+            </label>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 auto-rows-auto gap-4 mx-auto max-w-7xl">
