@@ -61,6 +61,13 @@ export default function Home() {
   const handleMaxNumberChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    // 入力が空の場合はそのまま空文字を返す
+    if (event.target.value === "") {
+      setMaxNumber(0);
+      return;
+    }
+
+    // 数値の場合は、1-999の範囲で設定する
     const newMax = Math.max(
       1,
       Math.min(999, parseInt(event.target.value) || 75)
@@ -116,7 +123,7 @@ export default function Home() {
             type="number"
             min="1"
             max="999"
-            value={maxNumber}
+            value={maxNumber || ""} // 0の場合は空文字を表示
             onChange={handleMaxNumberChange}
             className="ml-2 p-1 border rounded"
             disabled={drawnNumbers.length !== 0}
