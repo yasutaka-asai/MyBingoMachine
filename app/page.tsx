@@ -48,7 +48,11 @@ export default function Home() {
       // 初回レンダリング以外では、演出に合わせて表示を遅延させる
       const timer = setTimeout(() => {
         setVisibleNumbers(drawnNumbers.slice(0, visibleNumbers.length + 1));
-      }, 1200); // 抽選演出と同じ遅延を含ませる
+      }, 2100); // 抽選演出と同程度の遅延を含ませる
+      // 音声の長さ → useSoundのdurationを変更する
+      // アニメーションの長さ → globals.cssのanimationのdurationを変更する
+
+      // タイマーをクリアする
       return () => clearTimeout(timer);
     }
   }, [drawnNumbers, visibleNumbers, isInitialRender]);

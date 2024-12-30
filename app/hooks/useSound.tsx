@@ -7,9 +7,11 @@ interface SoundConfig {
 
 export const useSound = () => {
     const playSound = useCallback(async () => {
+      // 演出時間の調整 → page.tsxのtimerのdurationを変更する
+      // アニメーションの長さ → globals.cssのanimationのdurationを変更する
       const sounds: SoundConfig[] = [
-        { src: 'drumroll.mp3', duration: 1300 },
-        { src: 'rollend.mp3', duration: 2000 }
+        { src: 'drumroll.mp3', duration: 2000 },
+        { src: 'rollend.mp3', duration: 3000 }
       ];
   
       for (const sound of sounds) {
