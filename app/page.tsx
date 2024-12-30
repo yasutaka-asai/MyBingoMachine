@@ -17,6 +17,7 @@ export default function Home() {
   const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]); // 既に抽選された番号
   const [visibleNumbers, setVisibleNumbers] = useState<number[]>([]); // 表示される番号
   const [isInitialRender, setIsInitialRender] = useState(true); // 初回レンダリングかどうか
+  const [isDrumRoll, setIsDrumRoll] = useState(false); // ドラムロール中かどうか
 
   // ページ読み込み時にローカルストレージから既に抽選された番号を取得する
   // コンポーネントの初期化(useState)ははレンダリング前に実施される
@@ -38,16 +39,23 @@ export default function Home() {
   // useEffectで遅延処理を追加
   useEffect(() => {
     if (drawnNumbers.length > visibleNumbers.length) {
+      // ドラムロール中のフラグを立てる
+      setIsDrumRoll(true);
+
       // 初回レンダリング時は、抽選番号を即座に表示する
       if (isInitialRender) {
         setVisibleNumbers([...drawnNumbers]);
         setIsInitialRender(false);
+        // ドラムロール中のフラグを下ろす
+        setIsDrumRoll(false);
         return;
       }
 
       // 初回レンダリング以外では、演出に合わせて表示を遅延させる
       const timer = setTimeout(() => {
         setVisibleNumbers(drawnNumbers.slice(0, visibleNumbers.length + 1));
+        // ドラムロール中のフラグを下ろす
+        setIsDrumRoll(false);
       }, 2100); // 抽選演出と同程度の遅延を含ませる
       // 音声の長さ → useSoundのdurationを変更する
       // アニメーションの長さ → globals.cssのanimationのdurationを変更する
@@ -111,7 +119,7 @@ export default function Home() {
         <button
           onClick={drawNumber}
           className="bg-blue-500 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:bg-blue-600 duration-200"
-          disabled={!bingoMachine.getRemaining().length}
+          disabled={isDrumRoll || !bingoMachine.getRemaining().length}
         >
           抽選する
         </button>
