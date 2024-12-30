@@ -56,7 +56,7 @@ export default function Home() {
         setVisibleNumbers(drawnNumbers.slice(0, visibleNumbers.length + 1));
         // ドラムロール中のフラグを下ろす
         setIsDrumRoll(false);
-      }, 2100); // 抽選演出と同程度の遅延を含ませる
+      }, 1700); // 抽選演出と同程度の遅延を含ませる
       // 音声の長さ → useSoundのdurationを変更する
       // アニメーションの長さ → globals.cssのanimationのdurationを変更する
 
