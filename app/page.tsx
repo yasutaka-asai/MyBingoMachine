@@ -108,9 +108,12 @@ export default function Home() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-5xl font-brush mb-8 text-center text-red-700 py-4 bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500 relative z-10 shadow-lg border-2 border-red-300 rounded-md">
-        <span className="relative z-20">
-          🎍お正月ビンゴ大会🎍
-        </span>
+        <div className="relative z-20 mb-4">
+          🎍お正月🎍
+        </div>
+        <div className="relative z-20">
+          ビンゴ大会
+        </div>
         <span className="absolute inset-0 bg-white opacity-20 rounded-lg blur-md"></span>
       </h1>
 
