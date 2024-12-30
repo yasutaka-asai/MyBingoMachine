@@ -111,9 +111,7 @@ export default function Home() {
 
       <div className="text-center mb-8">
         <div
-          className={`text-[12rem] font-bold mb-4${
-            isInitialRender ? "" : "animate-number-change"
-          }`}
+          className={"text-[12rem] font-bold mb-4 animate-number-change"}
           key={currentNumber}
         >
           {currentNumber || "-"}
