@@ -170,7 +170,7 @@ export default function Home() {
                 onChange={handleSoundChange}
                 className="mr-1"
               />
-              ドラムロール
+              ランダム
             </label>
             <label className="mr-4 text-sm font-medium text-gray-700">
               <input
@@ -183,7 +183,7 @@ export default function Home() {
               />
               サウンド1
             </label>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="mr-4 text-sm font-medium text-gray-700">
               <input
                 type="radio"
                 name="sound"
@@ -193,6 +193,17 @@ export default function Home() {
                 className="mr-1"
               />
               サウンド2
+            </label>
+            <label className="text-sm font-medium text-gray-700">
+              <input
+                type="radio"
+                name="sound"
+                value={3}
+                checked={soundIndex === 3}
+                onChange={handleSoundChange}
+                className="mr-1"
+              />
+              サウンド3
             </label>
           </div>
         </div>
