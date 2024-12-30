@@ -17,6 +17,7 @@ export default function Home() {
   const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]); // 既に抽選された番号
   const [visibleNumbers, setVisibleNumbers] = useState<number[]>([]); // 表示される番号
   const [isInitialRender, setIsInitialRender] = useState(true); // 初回レンダリングかどうか
+  const [isDrumRoll, setIsDrumRoll] = useState(false); // ドラムロール中かどうか
 
   // ページ読み込み時にローカルストレージから既に抽選された番号を取得する
   // コンポーネントの初期化(useState)ははレンダリング前に実施される
@@ -26,8 +27,17 @@ export default function Home() {
     // ローカルストレージから既に抽選された番号を取得する
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      setDrawnNumbers(JSON.parse(stored));
+      const storedNumbers = JSON.parse(stored);
+      // 最後の番号を現在の番号として設定
+      setCurrentNumber(storedNumbers[storedNumbers.length - 1]);
+      // 既に抽選された番号を設定
+      setDrawnNumbers(storedNumbers);
+      // ページ読み込み時には即座にすべての番号を表示する
+      setVisibleNumbers(storedNumbers);
     }
+
+    // 初回実行時に初回レンダリングフラグを下ろす
+    setIsInitialRender(false);
   }, []);
 
   // drawnNumbers が変更されたら、ローカルストレージに保存する
@@ -38,17 +48,19 @@ export default function Home() {
   // useEffectで遅延処理を追加
   useEffect(() => {
     if (drawnNumbers.length > visibleNumbers.length) {
-      // 初回レンダリング時は、抽選番号を即座に表示する
-      if (isInitialRender) {
-        setVisibleNumbers([...drawnNumbers]);
-        setIsInitialRender(false);
-        return;
-      }
+      // ドラムロール中のフラグを立てる
+      setIsDrumRoll(true);
 
       // 初回レンダリング以外では、演出に合わせて表示を遅延させる
       const timer = setTimeout(() => {
         setVisibleNumbers(drawnNumbers.slice(0, visibleNumbers.length + 1));
-      }, 1200); // 抽選演出と同じ遅延を含ませる
+        // ドラムロール中のフラグを下ろす
+        setIsDrumRoll(false);
+      }, 2100); // 抽選演出と同程度の遅延を含ませる
+      // 音声の長さ → useSoundのdurationを変更する
+      // アニメーションの長さ → globals.cssのanimationのdurationを変更する
+
+      // タイマーをクリアする
       return () => clearTimeout(timer);
     }
   }, [drawnNumbers, visibleNumbers, isInitialRender]);
@@ -57,6 +69,13 @@ export default function Home() {
   const handleMaxNumberChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    // 入力が空の場合はそのまま空文字を返す
+    if (event.target.value === "") {
+      setMaxNumber(0);
+      return;
+    }
+
+    // 数値の場合は、1-999の範囲で設定する
     const newMax = Math.max(
       1,
       Math.min(999, parseInt(event.target.value) || 75)
@@ -88,23 +107,32 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-8">ビンゴマシン</h1>
+      <h1 className="text-5xl font-brush mb-8 text-center text-red-700 py-4 bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500 relative z-10 shadow-lg border-2 border-red-300 rounded-md">
+        <span className="relative z-20">
+          🎍お正月ビンゴ大会🎍
+        </span>
+        <span className="absolute inset-0 bg-white opacity-20 rounded-lg blur-md"></span>
+      </h1>
 
       <div className="text-center mb-8">
-        <div
-          className="text-[12rem] font-bold mb-4 transition-opacity duration-500 animate-number-change"
-          key={currentNumber}
-        >
-          {currentNumber || "-"}
+        <div className="relative inline-block">
+          <div
+            className={"text-[12rem] mb-4 animate-number-change text-shadow-lg font-brush"}
+            key={currentNumber}
+          >
+            {currentNumber || "-"}
+          </div>
         </div>
+        <br />
         <button
           onClick={drawNumber}
-          className="bg-blue-500 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:bg-blue-600 duration-200"
-          disabled={!bingoMachine.getRemaining().length}
+          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:from-blue-600 hover:to-blue-800 duration-200 shadow-md"
+          disabled={isDrumRoll || !bingoMachine.getRemaining().length}
         >
           抽選する
         </button>
       </div>
+
       <div className="text-center mb-4">
         <label className="block text-sm font-medium text-gray-700">
           ビンゴの最大値設定
@@ -112,7 +140,7 @@ export default function Home() {
             type="number"
             min="1"
             max="999"
-            value={maxNumber}
+            value={maxNumber || ""} // 0の場合は空文字を表示
             onChange={handleMaxNumberChange}
             className="ml-2 p-1 border rounded"
             disabled={drawnNumbers.length !== 0}
@@ -128,7 +156,7 @@ export default function Home() {
         ) : (
           visibleNumbers.map((num, index) => (
             <div key={index} className="w-full justify-center">
-              <DrawnNumber number={num} />
+              <DrawnNumber number={num}/>
             </div>
           ))
         )}
@@ -136,7 +164,7 @@ export default function Home() {
       <div className="text-center mt-8">
         <button
           onClick={resetDrawnNumbers}
-          className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 duration-200"
+          className="bg-gradient-to-r from-red-500 to-red-700 text-white px-6 py-2 rounded-lg hover:from-red-600 hover:to-red-800 duration-200 shadow-md"
         >
           リセット
         </button>
