@@ -27,8 +27,17 @@ export default function Home() {
     // ローカルストレージから既に抽選された番号を取得する
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      setDrawnNumbers(JSON.parse(stored));
+      const storedNumbers = JSON.parse(stored);
+      // 最後の番号を現在の番号として設定
+      setCurrentNumber(storedNumbers[storedNumbers.length - 1]);
+      // 既に抽選された番号を設定
+      setDrawnNumbers(storedNumbers);
+      // ページ読み込み時には即座にすべての番号を表示する
+      setVisibleNumbers(storedNumbers);
     }
+
+    // 初回実行時に初回レンダリングフラグを下ろす
+    setIsInitialRender(false);
   }, []);
 
   // drawnNumbers が変更されたら、ローカルストレージに保存する
@@ -41,15 +50,6 @@ export default function Home() {
     if (drawnNumbers.length > visibleNumbers.length) {
       // ドラムロール中のフラグを立てる
       setIsDrumRoll(true);
-
-      // 初回レンダリング時は、抽選番号を即座に表示する
-      if (isInitialRender) {
-        setVisibleNumbers([...drawnNumbers]);
-        setIsInitialRender(false);
-        // ドラムロール中のフラグを下ろす
-        setIsDrumRoll(false);
-        return;
-      }
 
       // 初回レンダリング以外では、演出に合わせて表示を遅延させる
       const timer = setTimeout(() => {
@@ -111,7 +111,9 @@ export default function Home() {
 
       <div className="text-center mb-8">
         <div
-          className="text-[12rem] font-bold mb-4 transition-opacity duration-500 animate-number-change"
+          className={`text-[12rem] font-bold mb-4${
+            isInitialRender ? "" : "animate-number-change"
+          }`}
           key={currentNumber}
         >
           {currentNumber || "-"}
