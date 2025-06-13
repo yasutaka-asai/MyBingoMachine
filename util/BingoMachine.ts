@@ -9,13 +9,12 @@ class BingoMachine {
     drawNumber(drawnNumbers: number[]): number | null {
         // すべての番号が抽選済みの場合は null を返す
         if (this.numbers.length === drawnNumbers.length) return null;
-        // 未抽選の番号からランダムに番号を選ぶ
-        while (true) {
-            const number = Math.floor(Math.random() * this.numbers.length);
-            if (!drawnNumbers.includes(number)) {
-                return number;
-            }
-        }
+        
+        const drawnSet = new Set(drawnNumbers);
+        const remaining = this.numbers.filter(num => !drawnSet.has(num));
+        
+        const randomIndex = Math.floor(Math.random() * remaining.length);
+        return remaining[randomIndex];
     }
 
     getRemaining(): number[] {
