@@ -1,15 +1,15 @@
-# Code Efficiency Analysis Report
+# コード効率性分析レポート
 
-## Overview
-This report documents efficiency issues found in the MyBingoMachine codebase and provides recommendations for improvements.
+## 概要
+このレポートは、MyBingoMachineコードベースで発見された効率性の問題を文書化し、改善の推奨事項を提供します。
 
-## Critical Issues Found
+## 発見された重要な問題
 
-### 1. **CRITICAL: Inefficient Random Number Generation Algorithm**
-**File:** `util/BingoMachine.ts` (lines 13-18)
-**Issue:** The `drawNumber()` method uses an infinite while loop with `includes()` check on potentially large arrays.
-**Impact:** O(n) time complexity per draw, potentially infinite loop in edge cases
-**Current Code:**
+### 1. **重要: 非効率的な乱数生成アルゴリズム**
+**ファイル:** `util/BingoMachine.ts` (13-18行目)
+**問題:** `drawNumber()` メソッドが、大きな配列に対して `includes()` チェックを行う無限ループを使用している
+**影響:** 抽選ごとにO(n)の時間計算量、エッジケースでは無限ループの可能性
+**現在のコード:**
 ```typescript
 while (true) {
     const number = Math.floor(Math.random() * this.numbers.length);
@@ -18,76 +18,76 @@ while (true) {
     }
 }
 ```
-**Problem:** As more numbers are drawn, the probability of finding an undrawn number decreases, leading to more iterations. The `includes()` method has O(n) complexity.
-**Recommended Fix:** Use a Set for O(1) lookups or maintain an array of remaining numbers.
+**問題点:** より多くの番号が抽選されるにつれて、未抽選の番号を見つける確率が減少し、より多くの反復が必要になります。`includes()` メソッドはO(n)の複雑さを持ちます。
+**推奨修正:** O(1)ルックアップのためにSetを使用するか、残りの番号の配列を維持する。
 
-### 2. **MODERATE: Unnecessary BingoMachine Recreation**
-**File:** `app/page.tsx` (lines 85, 108)
-**Issue:** New BingoMachine instances are created when maxNumber changes
-**Impact:** Unnecessary object allocation and garbage collection
-**Current Code:**
+### 2. **中程度: 不要なBingoMachineの再作成**
+**ファイル:** `app/page.tsx` (85行目、108行目)
+**問題:** maxNumberが変更されたときに新しいBingoMachineインスタンスが作成される
+**影響:** 不要なオブジェクト割り当てとガベージコレクション
+**現在のコード:**
 ```typescript
 setBingoMachine(new BingoMachine(newMax));
 ```
-**Recommended Fix:** Add a method to update maxNumber on existing instance.
+**推奨修正:** 既存のインスタンスでmaxNumberを更新するメソッドを追加する。
 
-### 3. **MODERATE: Inefficient Array Operations**
-**File:** `app/page.tsx` (line 57)
-**Issue:** Using `slice()` to create new arrays for state updates
-**Impact:** O(n) memory allocation for each visible number update
-**Current Code:**
+### 3. **中程度: 非効率的な配列操作**
+**ファイル:** `app/page.tsx` (57行目)
+**問題:** 状態更新のために `slice()` を使用して新しい配列を作成している
+**影響:** 表示される番号の更新ごとにO(n)のメモリ割り当て
+**現在のコード:**
 ```typescript
 setVisibleNumbers(drawnNumbers.slice(0, visibleNumbers.length + 1));
 ```
-**Recommended Fix:** Consider using indices or more efficient state management.
+**推奨修正:** インデックスまたはより効率的な状態管理の使用を検討する。
 
-### 4. **MINOR: Redundant Audio Object Creation**
-**File:** `app/hooks/useSound.tsx` (lines 21, 30)
-**Issue:** New Audio objects created for each sound play
-**Impact:** Memory allocation and potential audio loading delays
-**Current Code:**
+### 4. **軽微: 冗長なAudioオブジェクトの作成**
+**ファイル:** `app/hooks/useSound.tsx` (21行目、30行目)
+**問題:** 音声再生ごとに新しいAudioオブジェクトが作成される
+**影響:** メモリ割り当てと潜在的な音声読み込み遅延
+**現在のコード:**
 ```typescript
 const audio = new Audio(sound.src);
 audio.play();
 ```
-**Recommended Fix:** Pre-load and reuse Audio objects.
+**推奨修正:** Audioオブジェクトを事前読み込みして再利用する。
 
-### 5. **MINOR: Inefficient Border Color Calculation**
-**File:** `app/components/DrawnNumber.tsx` (lines 10-32)
-**Issue:** Switch statement recalculated on every render
-**Impact:** Unnecessary CPU cycles for static calculations
-**Recommended Fix:** Memoize the calculation or use a lookup table.
+### 5. **軽微: 非効率的な境界色計算**
+**ファイル:** `app/components/DrawnNumber.tsx` (10-32行目)
+**問題:** レンダリングごとにswitch文が再計算される
+**影響:** 静的計算のための不要なCPUサイクル
+**推奨修正:** 計算をメモ化するか、ルックアップテーブルを使用する。
 
-### 6. **MINOR: Potential Memory Leak**
-**File:** `app/page.tsx` (line 111)
-**Issue:** `window.location.reload()` instead of proper state reset
-**Impact:** Forces full page reload instead of efficient state management
-**Recommended Fix:** Reset state variables instead of reloading page.
+### 6. **軽微: 潜在的なメモリリーク**
+**ファイル:** `app/page.tsx` (111行目)
+**問題:** 適切な状態リセットの代わりに `window.location.reload()` を使用
+**影響:** 効率的な状態管理の代わりにページ全体の再読み込みを強制
+**推奨修正:** ページ再読み込みの代わりに状態変数をリセットする。
 
-## Performance Impact Assessment
+## パフォーマンス影響評価
 
-### High Impact (Fix Priority 1)
-- **BingoMachine.drawNumber()**: Could cause noticeable delays with large number ranges
+### 高影響（修正優先度1）
+- **BingoMachine.drawNumber()**: 大きな数値範囲で顕著な遅延を引き起こす可能性
 
-### Medium Impact (Fix Priority 2)
-- **Unnecessary object recreation**: Affects memory usage and GC pressure
-- **Array slice operations**: Cumulative memory allocation
+### 中影響（修正優先度2）
+- **不要なオブジェクト再作成**: メモリ使用量とGCプレッシャーに影響
+- **配列slice操作**: 累積的なメモリ割り当て
 
-### Low Impact (Fix Priority 3)
-- **Audio object creation**: Minor performance impact
-- **Border color calculation**: Minimal CPU impact
-- **Page reload**: UX impact more than performance
+### 低影響（修正優先度3）
+- **Audioオブジェクト作成**: 軽微なパフォーマンス影響
+- **境界色計算**: 最小限のCPU影響
+- **ページ再読み込み**: パフォーマンスよりもUX影響
 
-## Recommended Implementation Order
-1. Fix the critical drawNumber algorithm (highest impact)
-2. Optimize BingoMachine lifecycle management
-3. Improve state management for visible numbers
-4. Optimize audio handling
-5. Memoize border color calculations
-6. Replace page reload with proper state reset
+## 推奨実装順序
+1. 重要なdrawNumberアルゴリズムの修正（最高影響）
+2. BingoMachineライフサイクル管理の最適化
+3. 表示番号の状態管理の改善
+4. 音声処理の最適化
+5. 境界色計算のメモ化
+6. ページ再読み込みの適切な状態リセットへの置き換え
 
-## Testing Recommendations
-- Test with large number ranges (e.g., 999) to verify performance improvements
-- Verify functionality remains intact after optimizations
-- Monitor memory usage during extended use
-- Test audio performance with rapid successive draws
+## テスト推奨事項
+- 大きな数値範囲（例：999）でテストしてパフォーマンス改善を確認
+- 最適化後も機能が維持されることを確認
+- 長時間使用時のメモリ使用量を監視
+- 連続した高速抽選での音声パフォーマンスをテスト
