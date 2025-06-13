@@ -11,7 +11,8 @@ class BingoMachine {
         if (this.numbers.length === drawnNumbers.length) return null;
         // 未抽選の番号からランダムに番号を選ぶ
         while (true) {
-            const number = Math.floor(Math.random() * this.numbers.length);
+            const index = Math.floor(Math.random() * this.numbers.length);
+            const number = this.numbers[index];
             if (!drawnNumbers.includes(number)) {
                 return number;
             }
