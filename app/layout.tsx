@@ -8,8 +8,8 @@ const font = Mochiy_Pop_One({
 });
 
 export const metadata = {
-  title: 'お正月ビンゴ大会',
-  description: 'お正月ビンゴ大会',
+  title: '海のビンゴ大会',
+  description: '海のビンゴ大会',
 }
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className={font.className}>
-      <body className="bg-gradient-to-b from-red-100 to-yellow-100 min-h-screen">{children}</body>
+      <body className="bg-gradient-to-b from-blue-100 via-cyan-100 to-teal-100 min-h-screen">{children}</body>
     </html>
   )
 }

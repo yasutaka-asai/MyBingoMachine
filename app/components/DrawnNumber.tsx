@@ -11,23 +11,23 @@ const DrawnNumber: React.FC<DrawnNumberProps> = ({ number, className }) => {
     const range = Math.floor((num - 1) / 10);
     switch (range) {
       case 0:
-        return "border-red-500"; // 1-10
+        return "border-blue-500"; // 1-10
       case 1:
-        return "border-blue-500"; // 11-20
+        return "border-cyan-500"; // 11-20
       case 2:
-        return "border-green-500"; // 21-30
+        return "border-teal-500"; // 21-30
       case 3:
-        return "border-yellow-500"; // 31-40
+        return "border-sky-500"; // 31-40
       case 4:
-        return "border-purple-500"; // 41-50
+        return "border-indigo-500"; // 41-50
       case 5:
-        return "border-pink-500"; // 51-60
+        return "border-blue-600"; // 51-60
       case 6:
-        return "border-orange-500"; // 61-70
+        return "border-cyan-600"; // 61-70
       case 7:
-        return "border-teal-500"; // 71-80
+        return "border-teal-600"; // 71-80
       default:
-        return "border-gray-500"; // 81以上
+        return "border-slate-500"; // 81以上
     }
   };
 

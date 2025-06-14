@@ -113,9 +113,9 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-5xl font-brush mb-8 text-center text-red-700 py-4 bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500 relative z-10 shadow-lg border-2 border-red-300 rounded-md">
+      <h1 className="text-5xl font-brush mb-8 text-center text-blue-700 py-4 bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 relative z-10 shadow-lg border-2 border-blue-300 rounded-md">
         <div className="relative z-20 mb-4">
-          🎍お正月🎍
+          🌊海の世界🌊
         </div>
         <div className="relative z-20">
           ビンゴ大会
@@ -135,7 +135,7 @@ export default function Home() {
         <br />
         <button
           onClick={drawNumber}
-          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:from-blue-600 hover:to-blue-800 duration-200 shadow-md"
+          className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-12 py-6 rounded-lg font-bold text-4xl hover:from-cyan-600 hover:to-blue-700 duration-200 shadow-md"
           disabled={isDrumRoll || !bingoMachine.getRemaining().length}
         >
           抽選する
@@ -224,7 +224,7 @@ export default function Home() {
       <div className="text-center mt-8">
         <button
           onClick={resetDrawnNumbers}
-          className="bg-gradient-to-r from-red-500 to-red-700 text-white px-6 py-2 rounded-lg hover:from-red-600 hover:to-red-800 duration-200 shadow-md"
+          className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-6 py-2 rounded-lg hover:from-teal-600 hover:to-cyan-700 duration-200 shadow-md"
         >
           リセット
         </button>

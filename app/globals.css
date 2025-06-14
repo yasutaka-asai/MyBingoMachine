@@ -3,8 +3,11 @@
 @import 'tailwindcss/utilities';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f0f9ff;
+  --foreground: #0c4a6e;
+  --ocean-primary: #0ea5e9;
+  --ocean-secondary: #06b6d4;
+  --ocean-accent: #14b8a6;
 }
 
 @media (prefers-color-scheme: dark) {
